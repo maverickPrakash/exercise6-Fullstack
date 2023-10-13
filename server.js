@@ -23,6 +23,7 @@ mongoose.connect(DB_URL, {
 });
 
 
+
 app.get('/', (req, res) => {
     res.send("<h1>Welcome to Note taking application - Week06 Exercise</h1>");
 });
@@ -31,6 +32,6 @@ app.get('/', (req, res) => {
 app.use("/",router);
 
 
-app.listen(8698, () => {
+app.listen(8608, () => {
     console.log("Server is listening on port 8081");
 });
