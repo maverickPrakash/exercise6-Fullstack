@@ -9,21 +9,23 @@ const NoteModel = require("../models/Notes")
 routes.get("/notes", async(req, res) => {
     try {
         const noteList = await NoteModel.find({})
+        
         res.status(200).json(noteList)
     }catch (error){
         res.status(500).json(error)
     }
-    //res.send({message: "Get All Books"})
+    
 })
 //Add NEW Notes
-routes.post("/notes", (req, res) => {
+routes.post("/notes",async (req, res) => {
 
    console.log(req.body)
     try {
         var newNotes = new NoteModel({
             ...req.body
         })
-        await .save()
+        
+        await newNotes.save()
         res.status(200).json(newNotes)
     } catch (error) {
         res.status(500).json(error)
@@ -31,24 +33,39 @@ routes.post("/notes", (req, res) => {
     
 })
 
-//Update existing Book By Id
-routes.post("/book/:bookid", (req, res) => {
-    res.send({message: "Update existing Book By Id"})
+//Update existing Notes By Id
+routes.put("/notes/:noteid", async(req, res) => {
+    try {
+       await NoteModel.findByIdAndUpdate(req.params.noteid,{...req.body});
+        
+        res.send({message: "Updated"})
+    } catch (error) {
+        res.status(500).send(error)
+    }
 })
 
-//Delete Book By ID
-routes.delete("/book/:bookid", (req, res) => {
-    res.send({message: "Delete Book By ID"})
+//Delete Delete By ID
+routes.delete("/notes/:noteid", async (req, res) => {
+    try {
+        await NoteModel.findByIdAndDelete(req.params.noteid)
+        res.status(200).send("deleted")
+    } catch (error) {
+        res.status(500).send(error)
+    }
 })
 
-//Get Book By ID
-routes.get("/book/:bookid", (req, res) => {
-    res.send({message: "Get Book By ID"})
+//Get Notes By ID
+routes.get("/notes/:noteid", (req, res) => {
+    try {
+
+        const oneNote = NoteModel.findById(req.params.noteid)
+
+        res.status(200).send(oneNote)
+        
+    } catch (error) {
+        res.send(500).error(error)
+    }
 })
 
-//Get All Books in sorted order
-routes.get("/books/sort", (req, res) => {
-    res.send({message: "Get All Books in sorted order"})
-})
 
 module.exports = routes
